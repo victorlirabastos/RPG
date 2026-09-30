@@ -1,0 +1,147 @@
+Horror List — um caso por execução. Não passar este arquivo completo ao Main.
+Os dois casos oficiais vêm de https://open.kattis.com/problems/horror.
+Demais casos: construídos para validação. Compilar: javac -encoding UTF-8 -d build src/Main.java.
+Executar: java -cp build Main; colar apenas a ENTRADA de um caso, sem rótulos.
+
+CASO oficial-1
+ENTRADA
+6 3 5
+0 5 2
+0 1
+1 2
+4 5
+3 5
+0 2
+SAIDA
+1
+FIM
+
+CASO oficial-2
+ENTRADA
+6 2 3
+5 2
+0 5
+0 1
+3 4
+SAIDA
+3
+FIM
+
+CASO instancia-pequena
+ENTRADA
+7 2 6
+0 5
+0 1
+1 2
+2 3
+3 4
+4 5
+3 6
+SAIDA
+6
+FIM
+
+CASO uma-origem
+ENTRADA
+5 1 4
+0
+0 1
+1 2
+2 3
+3 4
+SAIDA
+4
+FIM
+
+CASO empate-finito
+ENTRADA
+6 2 5
+0 5
+0 1
+1 2
+2 3
+3 4
+4 5
+SAIDA
+2
+FIM
+
+CASO desconexo
+ENTRADA
+5 1 3
+0
+0 1
+1 2
+3 4
+SAIDA
+3
+FIM
+
+CASO sem-arestas
+ENTRADA
+4 1 0
+2
+SAIDA
+0
+FIM
+
+CASO minimo
+ENTRADA
+2 1 0
+0
+SAIDA
+1
+FIM
+
+CASO ciclo-atalho
+ENTRADA
+4 1 4
+0
+0 1
+1 2
+0 2
+2 3
+SAIDA
+3
+FIM
+
+CASO fontes-quase-todos
+ENTRADA
+4 3 3
+0 1 2
+0 1
+1 2
+2 3
+SAIDA
+3
+FIM
+
+
+CASOS DE LIMITE — CONSTRUÇÃO DETERMINÍSTICA
+Estas descrições não são entradas prontas para colar.
+
+L1: cadeia com N=1000, H=1, L=999, origem 0.
+Arestas: (i,i+1) para i de 0 a 998. Saída: 999.
+Verifica a maior distância finita N-1.
+
+L2: N=1000, H=999, L=0. Origens 0 a 998. Saída: 999.
+Verifica a inicialização com quase todos os vértices como fontes e um isolado.
+
+L3: N=1000, H=1, L=10000, origem 0.
+Primeiras 999 arestas: (0,v) para v de 1 a 999.
+Completar com os primeiros 9001 pares (u,v), 1<=u<v<=999,
+em ordem crescente de u e, dentro de cada u, de v.
+Saída: 1. Todos os demais vértices estão a distância 1 de 0.
+Verifica o limite de relações e desempate.
+
+REGISTRO DE VALIDAÇÃO LOCAL — 10/09/2026
+As 10 entradas acima e os 3 limites passaram na Main isolada.
+Também passaram 100 grafos pequenos aleatórios, totalizando 113 execuções.
+Geração auxiliar Python random.Random(20260908): para cada grafo,
+N=randint(2,15); H=randint(1,N-1); fontes=sample(range(N),H);
+para cada par u<v, incluir a aresta se random()<0.22.
+Comparação independente: Floyd–Warshall calcula distâncias entre todos os pares;
+para cada filme, tomar o mínimo até as fontes e selecionar o maior índice,
+desempatando pelo menor ID. Floyd–Warshall não integra a solução Java.
+As 100 entradas aleatórias e o executor ficaram fora da entrega.
+O Accepted 17/17 da imagem é uma evidência separada, do avaliador Kattis.
