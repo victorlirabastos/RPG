@@ -1,58 +1,50 @@
 # Marco 2 — Representação computacional
 
-## Representação escolhida e construção
+## Representação escolhida e referência
 
-Em [Main.java](../src/Main.java), cada filme corresponde a uma posição de `Bag<Integer>[] adj`, dentro da classe Graph. Cada Bag é uma lista simplesmente encadeada, seguindo Sedgewick e Wayne. A lista de adjacência usa O(V+E) de espaço, enquanto uma matriz reservaria O(V²).
+Em [Main.java](../src/Main.java), `Graph` armazena `List<Integer>[] adj`, com uma `ArrayList<Integer>` por vértice. A referência é [Graph de Sedgewick e Wayne](https://github.com/carubbi/RPG/blob/a3df01a7931344129dc5d7e16f6525ecc24a664b/algs4-java/algs4/Graph.java), disponibilizada pelo professor. A adaptação substitui Bag por ArrayList da biblioteca padrão, mantendo o vetor de listas, V, E e inserção nos dois sentidos. A iteração segue a ordem de inserção, não sua inversa.
 
-A Main lê N, H, L, os H IDs distintos da Horror List e L relações. `new Graph(N)` cria uma Bag vazia por filme. `addEdge(a,b)` insere b na lista de a e a na lista de b, pois a similaridade vale nos dois sentidos. As operações add de Bag custam O(1).
+Listas ocupam O(V+E), enquanto uma matriz reservaria O(V²). Inserir ao final de uma ArrayList custa O(1) amortizado. Não há classe Bag na implementação entregue.
 
-## Instância pequena e ordem efetiva da Bag
+## Leitura e construção passo a passo
 
-Usando a entrada do [Marco 1](marco-1.md), na ordem em que as arestas aparecem, a iteração da Bag produz:
+`Scanner.nextInt()` lê N, H, L, os H IDs e os L pares, independentemente das quebras de linha entre inteiros. A Main processa uma instância por execução, sem rótulos ENTRADA/SAIDA. Para a entrada do [Marco 1](marco-1.md), N=7, H=2, L=6 e `horrorList=[0,5]`.
+
+`new Graph(N)` cria sete listas vazias, inclusive para eventuais isolados. Cada `addEdge(v,w)` executa `adj[v].add(w)`, `adj[w].add(v)` e incrementa E uma vez.
+
+| Par lido | Listas alteradas após inserir | E acumulado |
+|---|---|---|
+| 0 1 | 0: [1]; 1: [0] | 1 |
+| 1 2 | 1: [0,2]; 2: [1] | 2 |
+| 2 3 | 2: [1,3]; 3: [2] | 3 |
+| 3 4 | 3: [2,4]; 4: [3] | 4 |
+| 4 5 | 4: [3,5]; 5: [4] | 5 |
+| 3 6 | 3: [2,4,6]; 6: [3] | 6 |
+
+## Adjacências e medidas estruturais
 
 ```text
 0: 1
-1: 2 0
-2: 3 1
-3: 6 4 2
-4: 5 3
+1: 0 2
+2: 1 3
+3: 2 4 6
+4: 3 5
 5: 4
 6: 3
 ```
-
-A Bag insere no início. Por isso a relação lida por último aparece primeiro na respectiva lista. A representação anterior dos marcos listava os mesmos vizinhos em ordem crescente; nesta consolidação a ordem da execução manual foi alinhada à estrutura realmente usada na Main. O conjunto de arestas e os índices não mudam.
 
 | Vértice | 0 | 1 | 2 | 3 | 4 | 5 | 6 |
 |---|---|---|---|---|---|---|---|
 | Grau | 1 | 2 | 2 | 3 | 2 | 1 | 1 |
 
-Ordem 7, tamanho 6, grau mínimo 1 e máximo 3. Soma dos graus 12=2×6, consistente com duas entradas por relação. A instância é conexa e tem V−1 arestas, portanto é uma árvore. O grafo geral do Horror List pode ter ciclos e ser desconexo.
+Ordem V=7, tamanho E=6, grau mínimo 1 e máximo 3. Soma dos graus 12=2E. A instância é conexa e tem V−1 arestas, portanto é uma árvore. O problema geral admite ciclos e desconexão.
 
-## Validação e justificativa
+## Validação e custo
 
-Cada par da entrada aparece em ambas as listas. Não há vértice ausente. A soma dos graus confirma 12 entradas para 6 relações. A Main isolada retorna 6 para essa instância, como esperado.
+Cada relação aparece em ambas as listas e todos os sete vértices estão representados. As seis inserções produzem exatamente as adjacências acima e a soma 12. O caso `instancia-pequena` do [executor](../testes/verificar.py) confirma a saída 6; os casos desconexo e sem-arestas cobrem vértices sem acesso às fontes. A validação estrutural adicional do executor confere as listas reais de Graph e os vetores da BFS.
 
-A construção inteira leva O(V+E). Percorrer todos os vizinhos do grafo pela lista também leva O(V+E). A lista armazena apenas relações existentes e serve diretamente à BFS.
+A construção leva O(V+E) no total, considerando inserções amortizadas. Percorrer todas as listas também custa O(V+E), com V listas e 2E entradas. A Main pressupõe as restrições válidas do Kattis: Graph não implementa validação explícita de IDs em addEdge; BreadthFirstPaths valida as origens e os vértices consultados. Isso não equivale a validar todo o arquivo de entrada.
 
-## Referência e alterações
+## Registro da correção
 
-Referência: [Graph](https://github.com/carubbi/RPG/blob/a3df01a7931344129dc5d7e16f6525ecc24a664b/algs4-java/algs4/Graph.java) e [Bag](https://github.com/carubbi/RPG/blob/a3df01a7931344129dc5d7e16f6525ecc24a664b/algs4-java/algs4/Bag.java), de Robert Sedgewick e Kevin Wayne, disponibilizadas pelo professor.
-
-Mantidos o vetor de Bag, validação dos vértices e addEdge nos dois sentidos. A adaptação mantém as estruturas da referência e reúne as classes dentro da Main, eliminando dependências externas. Não foi preciso alterar o código final para esta consolidação. A tabela acima documenta sua ordem real de iteração.
-
-## Leitura apoiada no código e construção passo a passo
-
-Em [Main.java](../src/Main.java#L178), `BufferedReader` lê as linhas e `StringTokenizer` separa os inteiros. A primeira linha fornece `N=7`, `H=2`, `L=6`; a segunda preenche `horrorList=[0,5]`. O código espera as H origens na segunda linha e um par por linha, conforme as entradas documentadas. Não é um leitor genérico de arquivos rotulados nem de várias instâncias por execução.
-
-`Graph(N)` cria sete bolsas vazias, inclusive para eventuais isolados. O laço de L pares chama `G.addEdge(u,v)`. Em [addEdge](../src/Main.java#L89), `E` aumenta uma vez e há duas inserções; em [Bag.add](../src/Main.java#L32), o novo nó passa a ser o primeiro.
-
-| Par lido | Listas alteradas após inserir | E acumulado |
-|---|---|---|
-| 0 1 | 0: [1]; 1: [0] | 1 |
-| 1 2 | 1: [2,0]; 2: [1] | 2 |
-| 2 3 | 2: [3,1]; 3: [2] | 3 |
-| 3 4 | 3: [4,2]; 4: [3] | 4 |
-| 4 5 | 4: [5,3]; 5: [4] | 5 |
-| 3 6 | 3: [6,4,2]; 6: [3] | 6 |
-
-A validação estrutural compara as listas acima com cada inserção do código, confere simetria e soma dos graus. O caso `instancia-pequena` do [executor](../testes/verificar.py) verifica a saída final 6; os casos desconexo e sem-arestas verificam que vértices sem caminho até as origens continuam representados. A revisão mantém Bag/Graph: o exemplo com `ArrayList` do repositório da dupla não descreve esta Main.
+A implementação entregue é o arquivo integral fornecido da submissão 20400623. A documentação foi alinhada a essa implementação, sem modificar o código submetido. Os Marcos 3 e 4 usam a ordem de adjacência acima.

@@ -1,4 +1,7 @@
+Código: src/Main.java; referência: arquivo fornecido da submissão 20400623.
+SHA-256: 5da8ee9517cb2f1e67d6181f449dc0f7ee75c0db63bd83d30d86893317809be4
 javac 24.0.2
+OK estruturas: adjacências, V/E, marked, distTo, edgeTo e não alcançados.
 OK oficial-1: 1
 OK oficial-2: 3
 OK instancia-pequena: 6
@@ -113,4 +116,4 @@ OK aleatorio-098: 5
 OK aleatorio-099: 0
 OK aleatorio-100: 1
 APROVADO: 10 documentados + 3 limites + 100 diferenciais = 113 casos.
-Semente: 20260908. Oráculo: Floyd–Warshall. Main.java preservada.
+Semente: 20260908. Oráculo: Floyd–Warshall. Main.java integral fornecida; sem alterações no código.

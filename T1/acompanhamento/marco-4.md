@@ -38,9 +38,11 @@ A escolha da BFS decorre da garantia de distâncias mínimas, não de uma comple
 
 `BreadthFirstPaths(Graph, Iterable<Integer> sources)` da referência já oferece múltiplas origens. Preservamos a inicialização conjunta e a atualização `distTo[w] = distTo[v]+1`, marcando ao inserir na fila.
 
-[Main.java](../src/Main.java) mantém a versão final existente no repositório: classes internas `Bag`, `Graph` e `Queue`, leitura com `BufferedReader`/`StringTokenizer`, BFS no método principal e seleção da resposta. Não depende de arquivos `Graph.java` ou `BreadthFirstPaths.java` externos. O código original foi apenas movido, sem alterar bytes.
+[Main.java](../src/Main.java) é o arquivo integral fornecido da submissão 20400623. Ele reúne as classes Main, Graph e BreadthFirstPaths no mesmo arquivo, usa Scanner para entrada, List/ArrayList para adjacências e Queue/ArrayDeque para a fila FIFO. Não depende de algs4 ou de arquivos Java externos.
 
-A versão de submissão omite `edgeTo`, pois o Kattis pede somente o ID. Os predecessores acima são anotações da simulação manual, seguindo o momento em que cada vértice é descoberto. A solução final não armazena esse vetor. A ordem dos vizinhos é a da Bag do Marco 2.
+A Main chama o construtor multi-origem de BreadthFirstPaths. A classe mantém `marked`, `edgeTo` e `distTo`; ao descobrir w a partir de v, grava `edgeTo[w]=v`, `distTo[w]=distTo[v]+1`, marca w e o enfileira. Os predecessores da tabela são reais para os vértices descobertos. O símbolo −1 nas raízes é apenas notação didática de ausência de pai: o vetor Java começa com zeros e não grava −1. Na instância, o vetor bruto é `edgeTo=[0,0,1,4,5,0,3]`. Para raízes e não alcançados, o valor padrão 0 não representa uma aresta de predecessor. O código oferece `edgeTo(v)`, mas não reconstrói nem imprime caminhos.
+
+A ordem dos vizinhos é a da ArrayList do Marco 2. Após a busca, todos os sete vértices desta instância têm `marked=true`.
 
 Os não alcançados permanecem com `Integer.MAX_VALUE`, maior que qualquer distância finita possível (no máximo N−1). Nenhum infinito entra na fila, portanto não há soma de 1 ao sentinela. A varredura de IDs é crescente e só atualiza a resposta com `>`, preservando o menor ID em empates, inclusive de infinito.
 
@@ -52,37 +54,29 @@ Inicializar o grafo custa O(V), ler arestas O(E) e inicializar as fontes O(H). U
 
 ## Testes, Accepted e ensaio
 
-[Casos de teste](../dados/casos-de-teste.txt): 2 exemplos oficiais e 8 casos de estudo com entradas e saídas completas. Há ainda descrições reproduzíveis de 3 limites. A Main isolada foi compilada com alvo Java 8 e passou nos 113 casos locais em 10/09/2026: 10 documentados, 3 limites e 100 grafos pequenos aleatórios comparados com Floyd–Warshall (semente 20260908). O registro é histórico; a revisão inclui agora [um executor reproduzível](../testes/verificar.py) e [seu resultado](../testes/resultado.txt), sem incorporá-lo à solução submetida. A comparação independente é validação empírica adicional; a justificativa de correção está acima.
+O [executor](../testes/verificar.py) recompila a Main fornecida com alvo Java 8 e executa os 10 casos de [casos-de-teste.txt](../dados/casos-de-teste.txt), 3 limites e 100 grafos pequenos comparados com Floyd–Warshall (semente 20260908). A revisão final obteve **113/113 casos aprovados**, além da conferência estrutural das adjacências e dos vetores reais da BFS. O registro está em [resultado.txt](../testes/resultado.txt).
 
-A imagem [accepted.png](../evidencias/accepted.png), preservada sem edição, mostra **Accepted**, Java, 17/17, 0,11 s, submissão [20374292](https://open.kattis.com/submissions/20374292). Os 17 testes pertencem ao Kattis, não são os testes locais. A captura não mostra as entradas nem permite comparar todo o código submetido byte a byte. Não houve nova submissão nesta revisão.
+A imagem [accepted.png](../evidencias/accepted.png), sem edição, mostra a submissão [20400623](https://open.kattis.com/submissions/20400623) de **Victor Lira Bastos: Horror List, Java, Accepted, 17/17, 0,26 s**. O código integral foi fornecido e copiado byte a byte para a entrega. Os 17 testes do Kattis são distintos dos testes locais. Não houve nova submissão nesta revisão.
 
-A [apresentação](../apresentacao/apresentacao.pdf) tem oito slides, com capa UNIFOR, identificação e matrículas na subcapa, planejados para 4min50s. Todos os slides têm referências no rodapé. O roteiro e o lembra-memória ficam fora do pacote do repositório. O grupo deve realizar o ensaio oral.
+A [apresentação](../apresentacao/apresentacao.pdf) conserva oito slides e o formato UNIFOR, atualizados para essa implementação e evidência. O [roteiro de ensaio](revisao-feedback.md) prevê 4min50s. A documentação não comprova apresentação passada dos marcos nem substitui o ensaio dos integrantes.
 
-## Diferencial e custo dominante
+## Diferencial, adaptações e custo dominante
 
-A escolha relevante é uma única BFS com H origens, evitando H buscas separadas, que poderiam custar O(H(V+E)). O suporte multi-origem já pertence ao algs4; nosso trabalho aplica esse recurso ao índice do problema e integra entrada, infinito e desempate.
+A única BFS com H origens evita H buscas separadas, que poderiam custar O(H(V+E)). O suporte multi-origem já pertence ao [BreadthFirstPaths de Sedgewick e Wayne](https://github.com/carubbi/RPG/blob/a3df01a7931344129dc5d7e16f6525ecc24a664b/algs4-java/algs4/BreadthFirstPaths.java). A adaptação usa coleções Java padrão, entrada Scanner e seleção do ID conforme o problema. Os vetores e a descoberta por níveis foram preservados.
 
-A BFS e a construção do grafo têm, ambas, limite O(V+E). São as etapas de maior ordem assintótica da solução, enquanto selecionar o ID custa O(V). Não foi medido o tempo de cada etapa isoladamente. O tempo de 0,11 s da captura é o tempo informado para aquela submissão.
+A construção com ArrayList custa O(V+E) no total por inserções amortizadas O(1). As operações de ArrayDeque também têm custo O(1) amortizado. Construção e BFS têm o mesmo limite O(V+E); selecionar o ID custa O(V). Não houve medição isolada por etapa. Os 0,26 s pertencem ao registro do Kattis, não ao tempo dos testes locais.
 
-## Referência, alterações e justificativas
+## Conferência com o código
 
-Referência: [BreadthFirstPaths](https://github.com/carubbi/RPG/blob/a3df01a7931344129dc5d7e16f6525ecc24a664b/algs4-java/algs4/BreadthFirstPaths.java), do material do professor, baseada em Sedgewick e Wayne. A BFS foi incorporada à Main com as estruturas encadeadas da referência. A leitura atende ao Kattis. A reconstrução de caminhos foi omitida porque a saída pede apenas um ID. A ordem de marcação e atribuição da distância dentro do bloco de descoberta não altera o algoritmo: ambas ocorrem antes de enfileirar.
-
-Mantida a aresta `(3,6)` dos Marcos 1–3, com `pred[6]=3` e caminho `6–3–4–5`. O Main original foi preservado. Na consolidação anterior, as classes auxiliares e os registros separados de testes ficaram fora do pacote. Esta revisão acrescenta o executor e o resultado em testes/, mantendo a solução autossuficiente.
-
-## Revisão do feedback: código, evidências e ensaio
-
-O registro acima da submissão 20374292 descreve a captura anterior, da conta de Vinícius. A evidência efetivamente citada pelo professor é [accepted-20400623.png](../evidencias/accepted-20400623.png): submissão [20400623](https://open.kattis.com/submissions/20400623), conta Victor Lira Bastos, Horror List, Java, Accepted, 17/17, 0,26 s. Ambas foram preservadas e identificadas separadamente. Os imports diferentes na 20400623 impedem atribuir o código integral daquela submissão à Main atual apenas pela captura. Não foi feita nova submissão nem substituição da implementação.
-
-| Trecho da Main | Como demonstrar na instância pequena |
+| Trecho | Demonstração na instância |
 |---|---|
-| [Inicialização, linhas 211–223](../src/Main.java#L211) | Todos começam em infinito; 0 e 5 recebem zero e entram na fila antes da expansão. |
-| [Laço da busca, linhas 225–234](../src/Main.java#L225) | Retirar 4 descobre 3 com distância 2. Ao processar 2, o vizinho 3 já está marcado; não muda de pai nem de distância. |
-| [Marcação, linhas 228–231](../src/Main.java#L228) | Marcar antes de enfileirar impede entradas duplicadas e mantém uma descoberta por vértice. |
-| [Seleção, linhas 236–247](../src/Main.java#L236) | As distâncias `[0,1,2,2,1,0,3]` levam a 6. No caso empate-finito, 2 e 3 têm HI=2; `>` mantém 2. |
+| Construtor multi-origem e bfs(Graph, Iterable) | Distâncias começam em infinito; 0 e 5 recebem zero e entram na fila antes da expansão. |
+| Bloco `if (!marked[w])` | Ao retirar 4, descobre 3, grava edgeTo[3]=4 e distTo[3]=2. Quando 2 examina 3, a marca impede nova descoberta. |
+| Marcação antes de queue.add(w) | Cada vértice entra na fila uma vez, considerando fontes distintas como exige o enunciado. |
+| Laço final da Main | Começa com result=0, examina IDs de 1 a N−1 e só substitui com `>`; retorna 6. |
 
-As adjacências examinadas, pela ordem da fila, são `0:[1]`, `5:[4]`, `1:[2,0]`, `4:[5,3]`, `2:[3,1]`, `3:[6,4,2]`, `6:[3]`. Apenas vizinhos ainda não marcados entram na fila. Isso confere a tabela manual com as 12 entradas da representação. Os predecessores são didáticos; `edgeTo` não existe na Main final.
+As adjacências examinadas pela ordem da fila são `0:[1]`, `5:[4]`, `1:[0,2]`, `4:[3,5]`, `2:[1,3]`, `3:[2,4,6]`, `6:[3]`, totalizando 12 entradas. A ordem de retirada é `0,5,1,4,2,3,6`.
 
-No caso desconexo documentado, S={0}, HI=[0,1,2,∞,∞]: 3 ganha por ser o menor ID com infinito. A fila só contém distâncias finitas, evitando somar 1 a `Integer.MAX_VALUE`.
+No caso empate-finito, 2 e 3 têm HI=2 e vence 2. No caso desconexo, S={0}, HI=[0,1,2,∞,∞], e vence 3. A fila só recebe vértices de distância finita, evitando overflow por soma ao sentinela. Os vértices desconexos permanecem `marked=false`, `distTo=Integer.MAX_VALUE` e `edgeTo=0` sem significado de pai.
 
-Para reproduzir a validação, execute `python3 testes/verificar.py` dentro de `RPG/T1`. O relatório atual registra compilação e 113 resultados; os dez casos originais e os três limites não foram alterados. O roteiro técnico de ensaio e as pendências estão no [registro da revisão](revisao-feedback.md). O ensaio oral continua a ser realizado pelos integrantes; o registro não afirma uma apresentação retroativa dos marcos 2 e 4.
+Para reproduzir: `python3 testes/verificar.py`, dentro de `RPG/T1`. A comparação diferencial valida a implementação empiricamente; a prova por níveis justifica o algoritmo.

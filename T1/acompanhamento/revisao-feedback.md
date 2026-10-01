@@ -1,65 +1,59 @@
-# Revisão do T1 a partir do feedback
+# Revisão final do T1 a partir do feedback
 
-## Fontes e preservação
+## Origem e escopo
 
-Fonte principal: `FeedBack T1.pdf`, relatório fornecido por Victor, páginas 4–9 (emitido em 30/09/2026). O PDF contém informações acadêmicas pessoais e não integra esta entrega pública; os requisitos pertinentes estão mapeados abaixo.
+Esta revisão continua a auditoria registrada a partir de `FeedBack T1.pdf`, páginas 4–9, emitido em 30/09/2026. O relatório pessoal não integra a entrega pública. O estado anterior do RPG está preservado no commit [6fbd655](https://github.com/victorlirabastos/RPG/tree/6fbd6553d7ee1b7b75302d67aec739bc238503fa). Somente o repositório `victorlirabastos/RPG` foi alterado; o repositório da dupla permaneceu intocado.
 
-Bases comparadas:
+## Código integral obtido e divergência resolvida
 
-- [RPG de Victor, ff9976492dc2a6493d898558ceb4553c0e59ac38](https://github.com/victorlirabastos/RPG/tree/ff9976492dc2a6493d898558ceb4553c0e59ac38).
-- [T1-RPG da dupla, f67e97543781506aecc4dc126b6ce189decac049](https://github.com/viniciusfeitosaa/T1-RPG/tree/f67e97543781506aecc4dc126b6ce189decac049), consultado somente como referência.
+Victor forneceu o `Main.java` integral identificado como o código da submissão Kattis **20400623**. O anexo da conversa foi recuperado e copiado byte a byte para `T1/src/Main.java`, sem reconstrução a partir de imports e sem mudanças no código. O caminho `/mnt/data/Main.java` pertencia à conversa de origem; nesta revisão foi usado o mesmo anexo recuperado pelo aplicativo.
 
-A revisão altera apenas o RPG de Victor. O commit-base preserva integralmente o estado anterior. Nenhum arquivo anterior foi excluído; Main.java, Marco 1, os casos de teste, a apresentação e accepted.png foram mantidos byte a byte. A revisão não atribui autoria individual com base apenas no conteúdo coincidente dos repositórios.
+SHA-256 do arquivo fornecido e da cópia entregue:
 
-## Diagnóstico e plano executado
+```text
+5da8ee9517cb2f1e67d6181f449dc0f7ee75c0db63bd83d30d86893317809be4
+```
 
-| Item | Comparação e correção |
+A implementação real usa Scanner, List/ArrayList, Queue/ArrayDeque e BreadthFirstPaths com marked/edgeTo/distTo. README, Marcos 2–4 e apresentação foram alinhados a ela. A divergência entre o código anterior e a evidência foi resolvida pela adoção integral do arquivo fornecido. A identificação da submissão vem do arquivo informado por Victor e da captura; não houve novo download autenticado do Kattis nem nova submissão.
+
+A única evidência final é [accepted.png](../evidencias/accepted.png), a imagem original de Victor, sem edição: **20400623, Horror List, Java, Accepted, 17/17, 0,26 s**. A evidência de outro integrante foi retirada da entrega final e permanece apenas no histórico Git.
+
+## Auditoria dos requisitos
+
+| Requisito do feedback | Correção e evidência atual |
 |---|---|
-| Representação | Na dupla, Marco 2 descreve ArrayList, mas a Main usa Bag/Graph. No RPG isso já estava alinhado; acrescentamos leitura vinculada ao código, seis passos de construção e validação. |
-| DFS | O RPG já tinha árvore, tempos e predecessores na ordem real da Bag. Acrescentamos todos os estados branco/cinza/preto, pilha, retornos, pseudocódigo e conferência dos intervalos. |
-| BFS | Na dupla, Marco 4 usa a ligação 2–6 e classes externas, divergindo da instância original e da Main. O RPG já preserva 3–6, pred[6]=3 e classes internas. Mantivemos e completamos a ligação com o código, desempates, infinito, testes e submissão. |
-| Caminhos | A dupla contém `scr`; o RPG já contém `src`. O README do RPG ainda chamava a pasta de T1-RPG e dizia apenas “a partir da raiz”. Corrigimos para clone do RPG, `cd RPG/T1`, comandos e estrutura atuais. |
-| Accepted | O feedback avalia 20400623, conta Victor, 0,26 s. O RPG tinha 20374292, conta Vinícius, 0,11 s. Preservamos a anterior e adicionamos a captura de Victor como accepted-20400623.png; README e Marco 4 distinguem as duas. |
-| Reprodutibilidade | Os dez casos são idênticos nos dois repositórios. Preservamos o arquivo e acrescentamos executor dos 10 casos, 3 limites e 100 grafos diferenciais conforme a geração já documentada. |
-| Referência e adaptações | Mantidas Graph/Bag/Queue e BFS multi-origem do algs4, com as justificativas de integração, infinito, omissão de caminhos e desempate. |
-
-O feedback registra ausência de apresentação dos Marcos 2 e 4. Documentar agora atende à orientação de registro; não comprova apresentação passada nem altera automaticamente a avaliação.
-
-## Identidade das implementações e das evidências
-
-Nas duas bases, Main.java tem o mesmo objeto Git `1b1c7ff71497a0caff3f88c26189b3540e0d5bcc`: as estruturas Bag/Graph/Queue são internas e a leitura usa BufferedReader/StringTokenizer. A captura 20374292 mostra esses mesmos imports, mas não todo o código.
-
-A captura 20400623 mostra ArrayList/List/ArrayDeque/Queue/Scanner. Ela foi copiada integralmente do arquivo `evidencias/Screenshot 2026-09-08 at 22.47.17.png` da base da dupla; o objeto Git é `ff448c0e21c9b3be15764583f61d148d0289f17a`. Nenhum número ou resultado da imagem foi editado. Essa evidência comprova a submissão citada pelo professor, sem demonstrar que seu código integral coincide com a Main preservada.
-
-Não foi reconstruída uma implementação a partir de imports, nem copiada uma implementação alternativa sobre a Main. Caso a entrega deva conter exatamente o código da submissão 20400623, Victor precisará disponibilizar o arquivo integral pelo Kattis; então será necessário compará-lo, validar e ajustar a documentação correspondente.
+| Estrutura e execução | Pasta src e comandos a partir de RPG/T1 consistentes; Main autossuficiente. |
+| Marco 2 | ArrayList em ordem de inserção, leitura Scanner, seis inserções, adjacências, graus, soma 12=2E, validação e custo amortizado. |
+| Marco 3 | DFS manual 0,1,2,3,4,5,6, árvore, pais, 14 eventos, cores, pilha e intervalos recalculados; limites da DFS explicitados. |
+| Marco 4 | Fila multi-origem, níveis, distâncias, marked e edgeTo reais, raízes sem pai e zeros padrão diferenciados, comparação DFS/BFS, correção, infinito e desempate. |
+| Referência e adaptações | Sedgewick/Wayne e material do professor citados; coleções Java padrão, entrada, integração e seleção justificadas. Multi-origem já existe na referência. |
+| Código e Accepted | Main idêntica ao anexo fornecido, SHA-256 registrado, somente evidência 20400623. |
+| Testes reproduzíveis | 113 casos reexecutados no novo código, mais verificação das estruturas e vetores; relatório atualizado. |
+| Complexidade | O(V+E) no total, listas e fila com operações amortizadas, O(V) adicional da BFS. Sem atribuir custo empírico a uma etapa não medida. |
+| Apresentação | Oito slides institucionais, adjacências corrigidas, implementação e evidência de Victor, roteiro de 4min50s. |
+| Uso de IA | README declara apoio de ChatGPT/Codex e preservação integral do arquivo fornecido. |
 
 ## Validação reproduzível
 
-Dentro de `RPG/T1`, executar:
+Dentro de `RPG/T1`, executar `python3 testes/verificar.py`, com Python 3 e JDK 8 ou superior. O executor compila em pasta temporária, testa 10 casos documentados, 3 limites e 100 grafos diferenciais com semente 20260908 e oráculo Floyd–Warshall. Também confere a ordem efetiva de Graph.adj, E, as distâncias, marcas e predecessores de BreadthFirstPaths, inclusive fontes e não alcançados. O [resultado](../testes/resultado.txt) identifica o código por SHA-256.
 
-```sh
-python3 testes/verificar.py
-```
+A simulação DFS é didática, externa à Main. Descoberta/término: 0=(1,14), 1=(2,13), 2=(3,12), 3=(4,11), 4=(5,8), 5=(6,7), 6=(9,10). A BFS mantém HI=[0,1,2,2,1,0,3] e resposta 6.
 
-Requisitos: Python 3 e JDK 8 ou superior. O executor não usa pacotes Python externos. A Main é compilada com alvo Java 8 em pasta temporária, removida automaticamente. O resultado desta revisão está em [resultado.txt](../testes/resultado.txt). São 113 casos: 10 entradas preservadas, 3 limites determinísticos e 100 grafos com semente 20260908 comparados com Floyd–Warshall. Isso não é uma nova submissão ao Kattis e não substitui a prova de correção do Marco 4.
+## Roteiro de até cinco minutos
 
-A conferência dos rastreamentos verificou as adjacências, predecessores, tempos da DFS e níveis da BFS na instância original com aresta 3–6. A solução Java não registra esses rastreamentos; eles são instrumentos didáticos separados.
+| Slides | Conteúdo | Tempo |
+|---|---|---|
+| 1–2 | Capa e identificação | 15 s |
+| 3–4 | Problema, mínimo até S e máximo entre candidatos | 45 s |
+| 5 | Modelo, origens e aresta 3–6 | 40 s |
+| 6 | Scanner, ArrayList, duas inserções e O(V+E) | 55 s |
+| 7 | DFS, fila multi-origem, marked/edgeTo/distTo e níveis | 80 s |
+| 8 | 113 testes, Accepted, infinito e desempate | 55 s |
 
-## Roteiro técnico para os integrantes
+Total planejado: **4min50s**, com 10 s de margem. Não é uma medição de ensaio realizado. Treinar as respostas: por que marcar antes de enfileirar? Por que O(V+E) e não O(VE)? O que significa edgeTo=0 numa raiz? Por que `>` preserva o menor ID?
 
-1. **Problema e modelo (45 s):** diferenciar a menor distância de cada filme até S da escolha do maior HI; mostrar 3–6 e as origens 0 e 5.
-2. **Representação (50 s):** abrir Graph.addEdge e Bag.add; explicar duas entradas por relação, ordem inversa de inserção e soma dos graus 12.
-3. **DFS (60 s):** mostrar a pilha chegando a 6, o retorno a 3 e a descoberta de 4; explicar d[6]=5, f[6]=6 e por que profundidade não é HI.
-4. **BFS e adaptação (80 s):** começar com fila [0,5], retirar 4 e descobrir 3; mostrar que a Main omite edgeTo e por que basta distTo para selecionar o ID.
-5. **Validação e conclusão (55 s):** demonstrar empate e infinito, justificar O(V+E), executar os testes e distinguir as duas submissões.
+## Pendências manuais
 
-Total previsto: 4min50s. É um roteiro para ensaio, não comprovação de ensaio realizado.
-
-Perguntas para praticar: por que marcar antes de enfileirar? Por que o laço aninhado não custa O(VE)? O que acontece com um isolado? Por que `>` e não `>=`? Qual adaptação é do grupo e qual já existe no algs4? As respostas estão nos Marcos 2–4 e devem ser demonstradas na Main.
-
-## Itens que dependem de ação humana
-
-- Ensaiar e explicar os marcos, especialmente os procedimentos de DFS e BFS solicitados pelo professor.
-- Encaminhar ao professor o link do T1 corrigido e solicitar a análise conforme as regras da disciplina.
-- Se for exigida identidade exata entre a Main entregue e a submissão 20400623, fornecer o código integral dessa submissão para comparação. A captura sozinha não resolve essa identificação.
-- O PDF da apresentação foi preservado; sua referência à 20374292 permanece como registro anterior. Na reapresentação, explicitar a distinção documentada ou atualizar os slides a partir do arquivo editável.
+- Ensaiar a apresentação e demonstrar compreensão dos Marcos 2–4 dentro de cinco minutos.
+- Encaminhar o link final ao professor e solicitar a análise conforme as regras da disciplina.
+- O registro escrito não comprova apresentação anterior dos Marcos 2 e 4 nem altera automaticamente a avaliação.

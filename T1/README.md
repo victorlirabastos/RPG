@@ -30,8 +30,7 @@ T1/
 ├── src/
 │   └── Main.java
 ├── evidencias/
-│   ├── accepted.png
-│   └── accepted-20400623.png
+│   └── accepted.png
 ├── apresentacao/
 │   └── apresentacao.pdf
 ├── dados/
@@ -41,7 +40,7 @@ T1/
     └── resultado.txt
 ```
 
-`Main.java` é autossuficiente. As classes necessárias `Bag`, `Graph` e `Queue` já estão dentro dele. O executor em `testes/` valida a solução e não é enviado ao Kattis. O PPTX editável e o material de estudo também ficam fora deste pacote.
+`Main.java` é autossuficiente. As classes `Main`, `Graph` e `BreadthFirstPaths` estão no mesmo arquivo. As coleções `List`/`ArrayList` e `Queue`/`ArrayDeque`, além de `Scanner`, pertencem à biblioteca padrão Java. O executor em `testes/` valida a solução e não é enviado ao Kattis. O PPTX editável e o material de estudo também ficam fora deste pacote.
 
 ## Compilação e execução
 
@@ -79,24 +78,25 @@ Saída: `6`. A pasta `build` e qualquer entrada temporária são geradas apenas 
 
 ## Representação e implementação de referência
 
-A representação é `Bag<Integer>[]`: uma lista encadeada de vizinhos por vértice. A relação `(a,b)` insere b na lista de a e a na lista de b. A `Bag` insere no início, então a iteração ocorre na ordem inversa de inserção.
+A representação real é `List<Integer>[] adj`, com uma `ArrayList<Integer>` por vértice. `Graph.addEdge(v,w)` acrescenta w à lista de v e v à lista de w. A iteração preserva a **ordem de inserção**. `Scanner.nextInt()` lê os inteiros separados por espaços ou quebras de linha.
 
-A referência é **Robert Sedgewick e Kevin Wayne, Algorithms, 4ª edição**, na versão disponibilizada pelo professor: [Graph](https://github.com/carubbi/RPG/blob/a3df01a7931344129dc5d7e16f6525ecc24a664b/algs4-java/algs4/Graph.java), [Bag](https://github.com/carubbi/RPG/blob/a3df01a7931344129dc5d7e16f6525ecc24a664b/algs4-java/algs4/Bag.java), [Queue](https://github.com/carubbi/RPG/blob/a3df01a7931344129dc5d7e16f6525ecc24a664b/algs4-java/algs4/Queue.java), [BreadthFirstPaths](https://github.com/carubbi/RPG/blob/a3df01a7931344129dc5d7e16f6525ecc24a664b/algs4-java/algs4/BreadthFirstPaths.java) e [DepthFirstPaths](https://github.com/carubbi/RPG/blob/a3df01a7931344129dc5d7e16f6525ecc24a664b/algs4-java/algs4/DepthFirstPaths.java).
-
-A conferência comparou construção do grafo, inserção de arestas, operações de bolsa/fila e o núcleo da BFS. O código segue essa metodologia; é uma adaptação para o problema, não uma cópia integral da biblioteca algs4.
+A referência é **Robert Sedgewick e Kevin Wayne, Algorithms, 4ª edição**, disponibilizada pelo professor: [Graph](https://github.com/carubbi/RPG/blob/a3df01a7931344129dc5d7e16f6525ecc24a664b/algs4-java/algs4/Graph.java), [BreadthFirstPaths](https://github.com/carubbi/RPG/blob/a3df01a7931344129dc5d7e16f6525ecc24a664b/algs4-java/algs4/BreadthFirstPaths.java) e [DepthFirstPaths](https://github.com/carubbi/RPG/blob/a3df01a7931344129dc5d7e16f6525ecc24a664b/algs4-java/algs4/DepthFirstPaths.java).
 
 | O que foi mantido ou adaptado | Motivo |
 |---|---|
-| Graph com Bag por vértice e inserção da aresta nos dois sentidos | Representar similaridade bidirecional |
-| Queue encadeada e marcação antes de enfileirar | Explorar em ordem de distância sem visitas repetidas |
-| BFS multi-origem já oferecida na referência | Calcular o mínimo até toda a Horror List em uma única busca |
-| Leitura de N, H, L, das origens e dos pares com BufferedReader/StringTokenizer | Atender ao formato específico do Kattis |
-| Classes reunidas em Main e BFS integrada ao método principal | Enviar um arquivo sem dependência da biblioteca algs4 |
-| Omissão de edgeTo e reconstrução de caminhos na solução final | O enunciado pede apenas o ID escolhido |
+| Graph com listas de adjacência e arestas nos dois sentidos | Similaridade bidirecional com espaço O(V+E) |
+| ArrayList em lugar da Bag da referência | Usar a biblioteca padrão, preservando ordem de inserção |
+| Queue implementada por ArrayDeque | Fila FIFO da biblioteca padrão, sem fila encadeada própria |
+| BreadthFirstPaths com marked, edgeTo e distTo | Registrar descoberta, predecessor e menor distância |
+| Construtor multi-origem já oferecido pela referência | Calcular o mínimo até toda a Horror List em uma busca |
+| Scanner para N, H, L, origens e pares | Ler o formato de entrada do Kattis |
+| Main, Graph e BreadthFirstPaths no mesmo arquivo | Submeter um arquivo autossuficiente, sem algs4 externo |
 | Integer.MAX_VALUE para não alcançados | Representar índice infinito |
-| Varredura crescente de IDs, atualizando apenas com `>` | Escolher o maior índice e preservar o menor ID em empates |
+| IDs crescentes e atualização apenas com `>` | Maximizar HI e preservar o menor ID em empates |
 
-O ponto relevante da solução é usar todas as origens juntas, evitando uma busca independente para cada filme ruim. Isso **não é uma invenção de algoritmo**: a referência já oferece o recurso. A adaptação é sua aplicação ao Horror Index, seguida das regras de infinito e desempate.
+A Main usa o construtor com várias origens. A classe também conserva o construtor de origem única, `hasPathTo`, `distTo` e `edgeTo`. Os predecessores são armazenados, embora a saída peça somente o ID e não reconstrua caminhos. Nas raízes e nos não alcançados, `edgeTo` conserva o valor padrão 0, sem significado de predecessor.
+
+BFS multi-origem não é um algoritmo novo do grupo: já existe na referência. A adaptação aplica esse recurso ao Horror Index e integra entrada, infinito e desempate. O arquivo fornecido da submissão foi adotado integralmente, sem modificar seus bytes.
 
 ## Complexidade: de onde vem O(V+E)
 
@@ -104,7 +104,7 @@ Aqui V=N, E=L e H<V.
 
 | Etapa | Tempo no pior caso | Motivo |
 |---|---|---|
-| Criar listas e ler as relações | O(V+E) | V listas e duas inserções por aresta |
+| Criar listas e ler as relações | O(V+E) | V listas e duas inserções amortizadas O(1) por aresta |
 | Inicializar distâncias e fontes | O(V+H) = O(V) | Vetores de V posições e H fontes |
 | Executar BFS | O(V+E) | Cada vértice enfileirado no máximo uma vez e cada aresta examinada no máximo duas vezes |
 | Escolher a resposta | O(V) | Uma varredura dos IDs |
@@ -120,19 +120,13 @@ A BFS é a etapa central e uma das mais custosas assintoticamente; **a construç
 - [Marco 3](acompanhamento/marco-3.md): execução manual da DFS, tempos, predecessores e aplicabilidade.
 - [Marco 4](acompanhamento/marco-4.md): BFS, escolha, integração, correção e validação.
 
-[Casos de teste](dados/casos-de-teste.txt) contém 10 entradas completas: 2 exemplos oficiais e 8 casos de estudo, incluindo a instância dos marcos. Também registra a construção e o resultado esperado de 3 casos de limite. Em 10/09/2026, a Main isolada passou nos 10 casos, nos 3 limites e em 100 grafos pequenos aleatórios (semente 20260908) comparados com Floyd–Warshall, totalizando 113 execuções. Esse registro histórico foi preservado. A revisão acrescenta um executor reproduzível e seu resultado atual, sem depender do executor antigo. Floyd–Warshall serviu apenas à verificação externa, não à solução submetida.
+[Casos de teste](dados/casos-de-teste.txt) contém 10 entradas completas: 2 exemplos oficiais e 8 casos de estudo, além da descrição de 3 limites. A revisão final reexecutou o código integral fornecido da submissão 20400623: **113/113 casos aprovados**, incluindo 100 grafos aleatórios comparados com Floyd–Warshall (semente 20260908). O oráculo pertence somente ao teste externo.
 
-### Evidência avaliada pelo professor: submissão de Victor
+### Evidência da submissão de Victor
 
-![Accepted de Victor, submissão 20400623](evidencias/accepted-20400623.png)
+![Accepted de Victor, submissão 20400623](evidencias/accepted.png)
 
-A captura citada no feedback corresponde à submissão [20400623](https://open.kattis.com/submissions/20400623), na conta Victor Lira Bastos: **Horror List, Java, Accepted, 17/17, 0,26 s**. Foi copiada sem edição da evidência do repositório da dupla. Os imports visíveis (`ArrayList`, `ArrayDeque`, `Scanner`) diferem da Main atual. Portanto, ela comprova o Accepted dessa submissão, mas não comprova identidade com `src/Main.java`. O código integral dessa submissão não está disponível nas capturas.
-
-### Evidência anterior preservada
-
-![Accepted anterior, submissão 20374292](evidencias/accepted.png)
-
-A captura anterior, na conta Vinícius Feitosa, registra a submissão [20374292](https://open.kattis.com/submissions/20374292): **Accepted, Java, 17/17**, com tempo de **0,11 s**. Os 17 testes são do avaliador Kattis, distintos dos testes locais. A captura não revela as entradas nem o código completo submetido. Não houve nova submissão nesta revisão.
+A captura original, sem edição, corresponde à submissão [20400623](https://open.kattis.com/submissions/20400623), conta **Victor Lira Bastos**, problema **Horror List**, linguagem **Java**, resultado **Accepted, 17/17, 0,26 s**. O arquivo integral fornecido por Victor foi recuperado do anexo da conversa e copiado byte a byte para `src/Main.java`. A divergência entre documentação e implementação foi resolvida. A entrega contém somente essa evidência. Os 17 testes do Kattis são distintos dos 113 testes locais; não houve nova submissão nesta revisão.
 
 ### Reexecutar a validação
 
@@ -148,15 +142,12 @@ O executor compila a Main em uma pasta temporária, lê os dez casos diretamente
 
 [Apresentação em PDF](apresentacao/apresentacao.pdf): oito slides no visual institucional: capa com logo UNIFOR, subcapa com identificação e matrículas, Introdução, Objetivo, Modelagem do problema como um grafo, Representação computacional, DFS x BFS e Validação. Todos os slides incluem referências no rodapé. Roteiro planejado para 4min50s, com margem até 5 minutos. [Template de referência](https://github.com/carubbi/RPG/blob/a3df01a7931344129dc5d7e16f6525ecc24a664b/mat-didatico/trabalhos/template/template_UNIFOR.pptx).
 
-O PDF foi preservado como material anterior e sua referência à submissão 20374292 é histórica. Para a entrega corrigida, use a evidência 20400623 acima e a distinção entre versões. O [registro da revisão](acompanhamento/revisao-feedback.md) contém um roteiro técnico para ensaio.
+O PDF foi atualizado para a representação com ArrayList, Scanner, ArrayDeque, os vetores da BFS e a submissão 20400623, preservando os oito slides e o formato institucional. O [registro da revisão](acompanhamento/revisao-feedback.md) inclui roteiro para ensaio de 4min50s.
 
 ## Uso de IA
 
-Foi utilizado **ChatGPT e Codex, da OpenAI**, como apoio ao estudo, à organização e revisão dos documentos, à conferência de consistência, aos testes locais e à preparação da apresentação. O código final preexistente `Main.java` e a captura de Accepted foram preservados sem alteração. Cada integrante deve compreender, testar e justificar o material apresentado.
+Foi utilizado **ChatGPT e Codex, da OpenAI**, como apoio ao estudo, à organização e revisão dos documentos, à conferência de consistência, aos testes locais e à atualização da apresentação. Nesta revisão, o `Main.java` integral fornecido por Victor e a captura de Accepted foram copiados sem alterações de conteúdo. Cada integrante deve compreender, testar e justificar o material apresentado.
 
 ## Registro da consolidação
 
-A consolidação anterior partiu do pacote de entrega existente. A Main permanece idêntica ao código preservado do commit [57d7a58](https://github.com/viniciusfeitosaa/T1-RPG/tree/57d7a58). A instância comum mantém a aresta `(3,6)`. A ordem manual da DFS foi normalizada para a ordem de iteração da Bag da solução final, evitando tabelas de duas representações diferentes. Referências a auxiliares retirados foram substituídas pelas explicações e tabelas contidas nos próprios marcos.
-
-
-A revisão motivada pelo feedback está detalhada em [revisao-feedback.md](acompanhamento/revisao-feedback.md), com comparação dos repositórios, alterações, validação e pendências.
+O [registro da revisão](acompanhamento/revisao-feedback.md) documenta a substituição pelo código integral da submissão 20400623, sua identificação por SHA-256 e a auditoria final. A instância comum preserva a aresta `(3,6)`. As simulações seguem a ordem de inserção da ArrayList. O repositório da dupla não foi alterado.
