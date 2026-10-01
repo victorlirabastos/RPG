@@ -16,31 +16,43 @@ A solução usa **BFS multi-origem**: todos os filmes de S entram inicialmente n
 
 ## Estrutura da entrega
 
-A pasta `T1-RPG` corresponde à raiz `T1/` do enunciado. Contém somente:
+A entrega está em `T1/` dentro do repositório `victorlirabastos/RPG`:
 
 ```text
-T1-RPG/
+T1/
 ├── README.md
 ├── acompanhamento/
 │   ├── marco-1.md
 │   ├── marco-2.md
 │   ├── marco-3.md
-│   └── marco-4.md
+│   ├── marco-4.md
+│   └── revisao-feedback.md
 ├── src/
 │   └── Main.java
 ├── evidencias/
-│   └── accepted.png
+│   ├── accepted.png
+│   └── accepted-20400623.png
 ├── apresentacao/
 │   └── apresentacao.pdf
-└── dados/
-    └── casos-de-teste.txt
+├── dados/
+│   └── casos-de-teste.txt
+└── testes/
+    ├── verificar.py
+    └── resultado.txt
 ```
 
-`Main.java` é autossuficiente. As classes necessárias `Bag`, `Graph` e `Queue` já estão dentro dele. Os arquivos auxiliares de demonstração e testes não são dependências da solução e ficaram fora da entrega. O PPTX editável e o material de estudo também ficam fora deste pacote.
+`Main.java` é autossuficiente. As classes necessárias `Bag`, `Graph` e `Queue` já estão dentro dele. O executor em `testes/` valida a solução e não é enviado ao Kattis. O PPTX editável e o material de estudo também ficam fora deste pacote.
 
 ## Compilação e execução
 
-Requer JDK 8 ou superior. A partir da raiz:
+Requer JDK 8 ou superior. Para obter a entrega e entrar na pasta correta:
+
+```sh
+git clone https://github.com/victorlirabastos/RPG.git
+cd RPG/T1
+```
+
+Se já está na raiz do repositório RPG, execute `cd T1`. Todos os comandos abaixo partem de `RPG/T1`:
 
 ```sh
 mkdir -p build
@@ -108,15 +120,35 @@ A BFS é a etapa central e uma das mais custosas assintoticamente; **a construç
 - [Marco 3](acompanhamento/marco-3.md): execução manual da DFS, tempos, predecessores e aplicabilidade.
 - [Marco 4](acompanhamento/marco-4.md): BFS, escolha, integração, correção e validação.
 
-[Casos de teste](dados/casos-de-teste.txt) contém 10 entradas completas: 2 exemplos oficiais e 8 casos de estudo, incluindo a instância dos marcos. Também registra a construção e o resultado esperado de 3 casos de limite. Em 10/09/2026, a Main isolada passou nos 10 casos, nos 3 limites e em 100 grafos pequenos aleatórios (semente 20260908) comparados com Floyd–Warshall, totalizando 113 execuções. O executor auxiliar não integra a entrega. Floyd–Warshall serviu apenas à verificação externa, não à solução submetida.
+[Casos de teste](dados/casos-de-teste.txt) contém 10 entradas completas: 2 exemplos oficiais e 8 casos de estudo, incluindo a instância dos marcos. Também registra a construção e o resultado esperado de 3 casos de limite. Em 10/09/2026, a Main isolada passou nos 10 casos, nos 3 limites e em 100 grafos pequenos aleatórios (semente 20260908) comparados com Floyd–Warshall, totalizando 113 execuções. Esse registro histórico foi preservado. A revisão acrescenta um executor reproduzível e seu resultado atual, sem depender do executor antigo. Floyd–Warshall serviu apenas à verificação externa, não à solução submetida.
 
-![Accepted no Kattis](evidencias/accepted.png)
+### Evidência avaliada pelo professor: submissão de Victor
 
-A captura preservada registra a submissão [20374292](https://open.kattis.com/submissions/20374292): **Accepted, Java, 17/17**, com tempo de **0,11 s**. Os 17 testes são do avaliador Kattis, distintos dos testes locais. A captura não revela as entradas nem o código completo submetido. Não houve nova submissão nesta revisão.
+![Accepted de Victor, submissão 20400623](evidencias/accepted-20400623.png)
+
+A captura citada no feedback corresponde à submissão [20400623](https://open.kattis.com/submissions/20400623), na conta Victor Lira Bastos: **Horror List, Java, Accepted, 17/17, 0,26 s**. Foi copiada sem edição da evidência do repositório da dupla. Os imports visíveis (`ArrayList`, `ArrayDeque`, `Scanner`) diferem da Main atual. Portanto, ela comprova o Accepted dessa submissão, mas não comprova identidade com `src/Main.java`. O código integral dessa submissão não está disponível nas capturas.
+
+### Evidência anterior preservada
+
+![Accepted anterior, submissão 20374292](evidencias/accepted.png)
+
+A captura anterior, na conta Vinícius Feitosa, registra a submissão [20374292](https://open.kattis.com/submissions/20374292): **Accepted, Java, 17/17**, com tempo de **0,11 s**. Os 17 testes são do avaliador Kattis, distintos dos testes locais. A captura não revela as entradas nem o código completo submetido. Não houve nova submissão nesta revisão.
+
+### Reexecutar a validação
+
+Com Python 3 e o JDK disponíveis, dentro de `RPG/T1`:
+
+```sh
+python3 testes/verificar.py
+```
+
+O executor compila a Main em uma pasta temporária, lê os dez casos diretamente do arquivo preservado, gera os três limites e os cem grafos com a semente documentada, e compara os aleatórios com Floyd–Warshall. Uma divergência termina com erro e mostra a entrada. Resultado desta revisão: [testes/resultado.txt](testes/resultado.txt).
 
 ## Apresentação
 
 [Apresentação em PDF](apresentacao/apresentacao.pdf): oito slides no visual institucional: capa com logo UNIFOR, subcapa com identificação e matrículas, Introdução, Objetivo, Modelagem do problema como um grafo, Representação computacional, DFS x BFS e Validação. Todos os slides incluem referências no rodapé. Roteiro planejado para 4min50s, com margem até 5 minutos. [Template de referência](https://github.com/carubbi/RPG/blob/a3df01a7931344129dc5d7e16f6525ecc24a664b/mat-didatico/trabalhos/template/template_UNIFOR.pptx).
+
+O PDF foi preservado como material anterior e sua referência à submissão 20374292 é histórica. Para a entrega corrigida, use a evidência 20400623 acima e a distinção entre versões. O [registro da revisão](acompanhamento/revisao-feedback.md) contém um roteiro técnico para ensaio.
 
 ## Uso de IA
 
@@ -124,5 +156,7 @@ Foi utilizado **ChatGPT e Codex, da OpenAI**, como apoio ao estudo, à organiza�
 
 ## Registro da consolidação
 
-Esta versão parte exclusivamente do pacote de entrega anterior. A Main permanece idêntica ao código preservado do commit [57d7a58](https://github.com/viniciusfeitosaa/T1-RPG/tree/57d7a58). A instância comum mantém a aresta `(3,6)`. A ordem manual da DFS foi normalizada para a ordem de iteração da Bag da solução final, evitando tabelas de duas representações diferentes. Referências a auxiliares retirados foram substituídas pelas explicações e tabelas contidas nos próprios marcos.
+A consolidação anterior partiu do pacote de entrega existente. A Main permanece idêntica ao código preservado do commit [57d7a58](https://github.com/viniciusfeitosaa/T1-RPG/tree/57d7a58). A instância comum mantém a aresta `(3,6)`. A ordem manual da DFS foi normalizada para a ordem de iteração da Bag da solução final, evitando tabelas de duas representações diferentes. Referências a auxiliares retirados foram substituídas pelas explicações e tabelas contidas nos próprios marcos.
 
+
+A revisão motivada pelo feedback está detalhada em [revisao-feedback.md](acompanhamento/revisao-feedback.md), com comparação dos repositórios, alterações, validação e pendências.

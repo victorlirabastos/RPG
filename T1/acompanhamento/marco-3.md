@@ -48,4 +48,44 @@ A adaptação parcial consiste em usar DFS para alcançabilidade e caminhos; o c
 
 ## Registro da revisão
 
-A versão anterior simulava vizinhos em ordem crescente e visitava 4 antes de 6. Esta versão usa a ordem real da Bag, visitando 6 antes de 4. Os tempos mudam, mas o grafo, a alcançabilidade e a conclusão sobre DFS permanecem os mesmos. A classe auxiliar de demonstração foi retirada do pacote por não ser dependência da solução; a evidência manual completa permanece neste arquivo.
+A versão anterior simulava vizinhos em ordem crescente e visitava 4 antes de 6. Esta versão usa a ordem real da Bag, visitando 6 antes de 4. Os tempos mudam, mas o grafo, a alcançabilidade e a conclusão sobre DFS permanecem os mesmos. A classe auxiliar de demonstração não faz parte da solução entregue. Esta revisão complementa a evidência manual abaixo, sem acrescentar DFS à Main.
+
+## Rastreamento de cada mudança de estado
+
+Vetor na ordem `[0,1,2,3,4,5,6]`: B = branco, C = cinza, P = preto. A pilha lista as chamadas ainda ativas, da raiz ao topo, **depois** de cada evento. Inicialmente todos estão B e `pred=-1`. Cada descoberta fixa o predecessor da tabela anterior; um vizinho já descoberto não recebe outro predecessor.
+
+| Tempo | Evento | Estados 0 a 6 | Pilha ativa |
+|---|---|---|---|
+| 0 | inicialização | B B B B B B B | [] |
+| 1 | descobre 0 | C B B B B B B | [0] |
+| 2 | descobre 1 por 0 | C C B B B B B | [0,1] |
+| 3 | descobre 2 por 1 | C C C B B B B | [0,1,2] |
+| 4 | descobre 3 por 2 | C C C C B B B | [0,1,2,3] |
+| 5 | descobre 6 por 3 | C C C C B B C | [0,1,2,3,6] |
+| 6 | termina 6 | C C C C B B P | [0,1,2,3] |
+| 7 | descobre 4 por 3 | C C C C C B P | [0,1,2,3,4] |
+| 8 | descobre 5 por 4 | C C C C C C P | [0,1,2,3,4,5] |
+| 9 | termina 5 | C C C C C P P | [0,1,2,3,4] |
+| 10 | termina 4 | C C C C P P P | [0,1,2,3] |
+| 11 | termina 3 | C C C P P P P | [0,1,2] |
+| 12 | termina 2 | C C P P P P P | [0,1] |
+| 13 | termina 1 | C P P P P P P | [0] |
+| 14 | termina 0 | P P P P P P P | [] |
+
+Na varredura de 6, o vizinho 3 já está cinza: não há chamada recursiva. Analogamente, 5 ignora 4; ao retornar, 4 ignora 3, 3 ignora 2, 2 ignora 1 e 1 ignora 0. São as arestas de retorno ao pai no grafo não direcionado, não novos filhos da árvore. O relógio só avança nos eventos de descoberta/término.
+
+Pseudocódigo da instrumentação manual, baseado em `DepthFirstPaths`:
+
+```text
+visitar(v):
+    estado[v] = CINZA; descoberta[v] = ++tempo
+    para w na ordem de G.adj(v):
+        se estado[w] == BRANCO:
+            pred[w] = v
+            visitar(w)
+    estado[v] = PRETO; termino[v] = ++tempo
+```
+
+Validação: há 14 eventos distintos (duas vezes V), seis arestas de árvore (V−1), e para todo filho w de v vale `d[v] < d[w] < f[w] < f[v]`. Os intervalos de 6 `[5,6]` e 4 `[7,10]` são separados e estão dentro de 3 `[4,11]`. Seguir os predecessores de 5 produz `5,4,3,2,1,0`, comprovando alcançabilidade, mas não o HI: 5 já pertence à Horror List e seu HI é zero.
+
+Em uma instância desconexa, a DFS iniciada em 0 deixa brancos os vértices fora de sua componente; seus tempos ficam indefinidos e pred=-1. Para medir alcançabilidade até qualquer origem, poderíamos iniciar DFS em cada fonte ainda não marcada, compartilhando as marcas. Isso encontra a união das componentes das fontes, mas não garante as menores distâncias. Para Horror List, mantemos a BFS multi-origem.

@@ -39,3 +39,20 @@ A construção inteira leva O(V+E). Percorrer todos os vizinhos do grafo pela li
 Referência: [Graph](https://github.com/carubbi/RPG/blob/a3df01a7931344129dc5d7e16f6525ecc24a664b/algs4-java/algs4/Graph.java) e [Bag](https://github.com/carubbi/RPG/blob/a3df01a7931344129dc5d7e16f6525ecc24a664b/algs4-java/algs4/Bag.java), de Robert Sedgewick e Kevin Wayne, disponibilizadas pelo professor.
 
 Mantidos o vetor de Bag, validação dos vértices e addEdge nos dois sentidos. A adaptação mantém as estruturas da referência e reúne as classes dentro da Main, eliminando dependências externas. Não foi preciso alterar o código final para esta consolidação. A tabela acima documenta sua ordem real de iteração.
+
+## Leitura apoiada no código e construção passo a passo
+
+Em [Main.java](../src/Main.java#L178), `BufferedReader` lê as linhas e `StringTokenizer` separa os inteiros. A primeira linha fornece `N=7`, `H=2`, `L=6`; a segunda preenche `horrorList=[0,5]`. O código espera as H origens na segunda linha e um par por linha, conforme as entradas documentadas. Não é um leitor genérico de arquivos rotulados nem de várias instâncias por execução.
+
+`Graph(N)` cria sete bolsas vazias, inclusive para eventuais isolados. O laço de L pares chama `G.addEdge(u,v)`. Em [addEdge](../src/Main.java#L89), `E` aumenta uma vez e há duas inserções; em [Bag.add](../src/Main.java#L32), o novo nó passa a ser o primeiro.
+
+| Par lido | Listas alteradas após inserir | E acumulado |
+|---|---|---|
+| 0 1 | 0: [1]; 1: [0] | 1 |
+| 1 2 | 1: [2,0]; 2: [1] | 2 |
+| 2 3 | 2: [3,1]; 3: [2] | 3 |
+| 3 4 | 3: [4,2]; 4: [3] | 4 |
+| 4 5 | 4: [5,3]; 5: [4] | 5 |
+| 3 6 | 3: [6,4,2]; 6: [3] | 6 |
+
+A validação estrutural compara as listas acima com cada inserção do código, confere simetria e soma dos graus. O caso `instancia-pequena` do [executor](../testes/verificar.py) verifica a saída final 6; os casos desconexo e sem-arestas verificam que vértices sem caminho até as origens continuam representados. A revisão mantém Bag/Graph: o exemplo com `ArrayList` do repositório da dupla não descreve esta Main.
