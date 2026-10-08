@@ -1,89 +1,64 @@
-from graph import Graph
-from depth_first_paths import DepthFirstPaths
-from breadth_first_paths import BreadthFirstPaths
+from digraph import Digraph
+from directed_dfs import DirectedDFS
 
 
 def main():
-    # -----------------------------
-    # 1. Construção do grafo
-    # -----------------------------
+    # Lê a quantidade de cidades (vértices)
+    # e de rotas aéreas (arestas direcionadas)
+    n, m = map(int, input().split())
 
-    # Cria um grafo com 7 vértices:
-    # 0, 1, 2, 3, 4, 5 e 6
-    g = Graph(7)
+    # Cria o dígrafo com n vértices
+    g = Digraph(n)
 
-    # Adiciona as arestas do grafo
-    g.add_edge(0, 1)
-    g.add_edge(1, 2)
-    g.add_edge(2, 3)
-    g.add_edge(3, 4)
-    g.add_edge(4, 5)
-    g.add_edge(1, 6)
+    # Lê as m rotas
+    for _ in range(m):
+        a, b = map(int, input().split())
 
-    # -----------------------------
-    # 2. Exibição do grafo
-    # -----------------------------
+        # O CSES numera as cidades de 1 até n.
+        # Internamente usamos índices de 0 até n - 1.
+        a -= 1
+        b -= 1
 
-    print("Grafo:")
-    print(g)
+        # Adiciona a rota direcionada a -> b
+        g.add_edge(a, b)
 
-    print("\nGrau do vértice 1:", g.degree(1))
-    print("Maior grau:", g.max_degree())
-    print("Número de auto-laços:", g.number_of_self_loops())
+    # --------------------------------------------------
+    # 1ª DFS: verifica se a cidade 1 alcança todas as demais
+    # --------------------------------------------------
 
-    # -----------------------------
-    # 3. Definição da origem
-    # -----------------------------
+    dfs = DirectedDFS(g, 0)
 
-    origem = 0
+    for v in range(n):
+        if not dfs.marked(v):
+            print("NO")
 
-    # -----------------------------
-    # 4. Busca em Profundidade - DFS
-    # -----------------------------
+            # Cidade 1 não consegue chegar até a cidade v + 1
+            print(1, v + 1)
+            return
 
-    dfs = DepthFirstPaths(g, origem)
+    # --------------------------------------------------
+    # 2ª DFS: verifica se todas as cidades alcançam a cidade 1
+    # --------------------------------------------------
 
-    print("\nDFS:")
+    reversed_graph = g.reverse()
 
-    for v in range(g.V):
+    dfs_reversed = DirectedDFS(reversed_graph, 0)
 
-        if dfs.has_path_to(v):
+    for v in range(n):
+        if not dfs_reversed.marked(v):
+            print("NO")
 
-            caminho = list(dfs.path_to(v))
+            # No grafo reverso:
+            # 1 não consegue chegar até v + 1.
+            #
+            # Portanto, no grafo original:
+            # v + 1 não consegue chegar até 1.
+            print(v + 1, 1)
+            return
 
-            print(
-                f"{origem} até {v}: {caminho}"
-            )
-
-        else:
-
-            print(
-                f"{origem} e {v}: não conectados"
-            )
-
-    # -----------------------------
-    # 5. Busca em Largura - BFS
-    # -----------------------------
-
-    bfs = BreadthFirstPaths(g, origem)
-
-    print("\nBFS:")
-
-    for v in range(g.V):
-
-        if bfs.has_path_to(v):
-
-            caminho = list(bfs.path_to(v))
-
-            print(
-                f"{origem} até {v}: {caminho}"
-            )
-
-        else:
-
-            print(
-                f"{origem} e {v}: não conectados"
-            )
+    # Se as duas verificações passaram,
+    # o dígrafo é fortemente conexo
+    print("YES")
 
 
 if __name__ == "__main__":
