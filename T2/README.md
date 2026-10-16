@@ -1,44 +1,38 @@
 # T2 — Flight Routes Check
 
-## Problema
+**Linguagem:** Python
+**Problema:** [CSES Flight Routes Check](https://cses.fi/problemset/task/1682)
 
-CSES Flight Routes Check
+## Visão geral
 
-Link oficial:
-https://cses.fi/problemset/task/1682
+A solução verifica se um dígrafo é fortemente conexo. Ela executa uma busca em profundidade a partir da cidade 1 no grafo original e outra no grafo reverso. Se uma das buscas não alcançar todas as cidades, retorna um par que demonstra a falta de conectividade.
 
-## Linguagem
+## Navegação
 
-Python
+- [Marcos 1–4](acompanhamento/): modelagem, propriedade estrutural, estratégia e conclusão.
+- [Código-fonte](src/): módulos Python e solução consolidada para submissão.
+- [Casos de teste](dados/casos-de-teste.txt): entradas pequenas com saídas esperadas.
+- [Evidência da submissão](evidencias/accepted.png): captura do resultado no CSES.
+- [Apresentação](apresentacao/README.md): situação do PDF da apresentação.
 
-## Objetivo
+## Código-fonte
 
-Resolver o problema utilizando conceitos de conectividade em grafos dirigidos e buscas em profundidade ou largura, seguindo as implementações de referência disponibilizadas na disciplina.
+- [main.py](src/main.py): programa principal, que importa os módulos locais.
+- [digraph.py](src/digraph.py): representação do dígrafo e construção do reverso.
+- [directed_dfs.py](src/directed_dfs.py): busca iterativa e consulta de alcançabilidade.
+- [submission.py](src/submission.py): versão consolidada em um único arquivo.
+- [graph.py](src/graph.py), [depth_first_paths.py](src/depth_first_paths.py) e [breadth_first_paths.py](src/breadth_first_paths.py): implementações de referência mantidas no projeto.
 
-## Estrutura do projeto
+## Executar
 
-- `acompanhamento/`: registros dos Marcos 1 a 4;
-- `src/`: implementação em Python;
-- `dados/`: casos de teste;
-- `evidencias/`: evidências da submissão;
-- `apresentacao/`: material da apresentação final.
+Requer Python 3. A partir desta pasta, execute:
 
-## Implementações-base
+```sh
+python3 src/main.py
+```
 
-Foram reaproveitadas e adaptadas estruturas em Python já implementadas anteriormente:
+Informe a entrada do problema pelo terminal. Para testar, use individualmente as entradas de [casos-de-teste.txt](dados/casos-de-teste.txt) e compare com as saídas esperadas. Para submeter ao CSES, use o conteúdo de `src/submission.py`.
 
-- `Graph.py`
-- `DepthFirstPaths.py`
-- `BreadthFirstPaths.py`
-- `Main.py`
+## Acompanhamento
 
-As implementações seguem como referência as estruturas trabalhadas na disciplina e o repositório `algs4-py`.
-
-## Progresso
-
-- [x] Marco 1 — Problema e conhecimento prévio
-- [x] Marco 2 — Propriedade estrutural
-- [ ] Marco 3 — Adaptação e testes
-- [ ] Marco 4 — Relação estrutural e conclusão
-- [ ] Accepted no CSES
-- [ ] Apresentação final
+Os registros dos quatro marcos estão publicados em [acompanhamento/](acompanhamento/). A apresentação em PDF ainda não consta no workspace; a situação está registrada em [apresentacao/](apresentacao/README.md).
