@@ -1,0 +1,63 @@
+Compare o conjunto de pares não ordenados. Todos os casos representam árvores com pesos positivos.
+
+Caso 1 — amostra oficial 1 (empate entre estradas de peso 1)
+Entrada:
+4
+0 1 1 2
+1 0 2 3
+1 2 0 3
+2 3 3 0
+Saída esperada:
+1 2
+1 3
+1 4
+
+Caso 2 — amostra oficial 2 (ramificações e caminhos indiretos)
+Entrada:
+7
+0 2 9 1 4 3 3
+2 0 11 1 6 3 3
+9 11 0 10 5 12 12
+1 1 10 0 5 2 2
+4 6 5 5 0 7 7
+3 3 12 2 7 0 4
+3 3 12 2 7 4 0
+Saída esperada:
+1 4
+1 5
+2 4
+3 5
+4 6
+4 7
+
+Caso 3 — limites mínimos de n e peso fora da diagonal
+Entrada:
+2
+0 1
+1 0
+Saída esperada:
+1 2
+
+Caso 4 — maior distância permitida
+Entrada:
+2
+0 9999999
+9999999 0
+Saída esperada:
+1 2
+
+Caso 5 — cadeia com extremidades em índices não consecutivos
+Entrada:
+4
+0 5 3 9
+5 0 2 4
+3 2 0 6
+9 4 6 0
+Saída esperada:
+1 3
+2 3
+2 4
+
+Caso 6 — limite n = 2500 (gerador para a fase de testes)
+Use uma cadeia 1–2–…–2500 com cada estrada de comprimento 1.
+Gere D[i][j] = |i−j| e espere as 2499 arestas (i,i+1).
