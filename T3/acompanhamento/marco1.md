@@ -22,6 +22,5 @@ A promessa de origem em uma árvore torna desnecessário definir saída de impos
 
 ## Fontes e verificação
 
-- [Conferência Kattis e NCNA 2017](../evidencias/conferencia-enunciado.md)
-- [Casos de teste](../dados/casos-de-teste.txt)
+- [Kattis Lost Map](https://open.kattis.com/problems/lostmap) e [NCNA 2017, pp. 23–24](https://brycesandlund.com/NCNA_2017.pdf#page=23). Conferidos em 24/11/2026. Os limites de entrada, o formato da saída e as duas amostras coincidem.
 - Ricardo Carubbi, UNIFOR. A8 — Árvore Geradora Mínima e A9 — Caminhos de Custo Mínimo, Unidade 3.
