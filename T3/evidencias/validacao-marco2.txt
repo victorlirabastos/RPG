@@ -1,0 +1,25 @@
+Caso 1 — amostra oficial 1 (empate entre estradas de peso 1) — 3 estradas, peso 4
+  Prim matricial e reconstrução da matriz: OK
+  KruskalMST: OK
+  LazyPrimMST: OK
+  PrimMST: TypeError: '<=' not supported between instances of 'NoneType' and 'int'
+Caso 2 — amostra oficial 2 (ramificações e caminhos indiretos) — 6 estradas, peso 15
+  Prim matricial e reconstrução da matriz: OK
+  KruskalMST: OK
+  LazyPrimMST: OK
+  PrimMST: TypeError: '<=' not supported between instances of 'NoneType' and 'int'
+Caso 3 — limites mínimos de n e peso fora da diagonal — 1 estradas, peso 1
+  Prim matricial e reconstrução da matriz: OK
+  KruskalMST: OK
+  LazyPrimMST: OK
+  PrimMST: OK
+Caso 4 — maior distância permitida — 1 estradas, peso 9999999
+  Prim matricial e reconstrução da matriz: OK
+  KruskalMST: OK
+  LazyPrimMST: OK
+  PrimMST: OK
+Caso 5 — cadeia com extremidades em índices não consecutivos — 3 estradas, peso 9
+  Prim matricial e reconstrução da matriz: OK
+  KruskalMST: OK
+  LazyPrimMST: OK
+  PrimMST: OK
