@@ -35,7 +35,8 @@ O tempo total é Θ(n²), incluindo leitura, seleção e atualização. A matriz
 
 - [Casos de teste](dados/casos-de-teste.txt)
 - [Validação local e estado da submissão](evidencias/README.md)
-- [Acompanhamento dos marcos](acompanhamento/marcos.md)
+- [Marco 1 — Formulação](acompanhamento/marco-1.md)
+- [Marco 2 — Escolha do algoritmo](acompanhamento/marco-2.md)
 
 ## Uso de IA
 
